@@ -1,0 +1,49 @@
+pip install prophet
+pip install fredapi
+import pandas as pd
+import plotly.graph_objects as go
+from fredapi import Fred
+from prophet import Prophet
+
+# Initialize FRED API
+fred = Fred(api_key='c07b88a0c6e040c8f8ab82885c98d6c7')
+
+# Fetch CPI data from FRED
+cpi_data = fred.get_series('CPIAUCSL', start='1989-12-01')
+
+# Create DataFrame with CPI data
+df = pd.DataFrame({'ds': cpi_data.index, 'y': cpi_data.values})
+
+# Data Cleaning and Preprocessing
+# Handle missing values using more sophisticated methods
+# Detect and handle outliers
+
+# Initialize Prophet model with tuned parameters
+ml = Prophet(seasonality_mode='additive',
+             changepoint_prior_scale=0.05,  # Adjust as needed
+             yearly_seasonality=True,  # Assuming yearly seasonality
+             weekly_seasonality=False)  # Adjust as needed
+
+# Fit the model
+ml.fit(df)
+
+# Make future predictions
+future = ml.make_future_dataframe(periods=50, freq='MS')
+
+# Evaluate forecast uncertainty
+forecast = ml.predict(future)
+ml.plot_components(forecast)  # Visualize trend and seasonality components
+
+# Plot original CPI data
+fig = go.Figure()
+fig.add_trace(go.Scatter(x=df['ds'], y=df['y'], mode='lines', name='Original CPI Data'))
+
+# Plot forecasted CPI
+fig.add_trace(go.Scatter(x=forecast['ds'], y=forecast['yhat'], mode='lines', name='Forecasted CPI'))
+
+# Update layout
+fig.update_layout(title='Original vs. Forecasted CPI',
+                  xaxis_title='Date',
+                  yaxis_title='CPI Value')
+
+fig.show()
