@@ -28,7 +28,7 @@ ml = Prophet(seasonality_mode='additive',
 ml.fit(df)
 
 # Make future predictions
-future = ml.make_future_dataframe(periods=50, freq='MS')
+future = ml.make_future_dataframe(periods=12, freq='MS')
 
 # Evaluate forecast uncertainty
 forecast = ml.predict(future)
