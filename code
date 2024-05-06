@@ -14,10 +14,6 @@ cpi_data = fred.get_series('CPIAUCSL', start='1989-12-01')
 # Create DataFrame with CPI data
 df = pd.DataFrame({'ds': cpi_data.index, 'y': cpi_data.values})
 
-# Data Cleaning and Preprocessing
-# Handle missing values using more sophisticated methods
-# Detect and handle outliers
-
 # Initialize Prophet model with tuned parameters
 ml = Prophet(seasonality_mode='additive',
              changepoint_prior_scale=0.05,  # Adjust as needed
