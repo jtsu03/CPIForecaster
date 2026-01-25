@@ -6,7 +6,7 @@ from fredapi import Fred
 from prophet import Prophet
 
 # Initialize FRED API
-fred = Fred(api_key='c07b88a0c6e040c8f8ab82885c98d6c7')
+fred = Fred(api_key='***')
 
 # Fetch CPI data from FRED
 cpi_data = fred.get_series('CPIAUCSL', start='1989-12-01')
